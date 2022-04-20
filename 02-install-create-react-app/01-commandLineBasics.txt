@@ -1,0 +1,12 @@
+
+Comandos de la terminal
+
+pwd: ver la ruta del archivo actual
+ls: ver las carpetas o directorios que contiene la ruta actual
+cd: para navegar a un directorio específico (ejemplo, cd desktop)
+cd .. : navegar al parent del directorio actual
+arrow keys up/down: navegar por los últimos comandos ingresados
+ls -a : ver carpetas o archivos ocultos en directorio actual 
+clear: limpiar consola
+mkdir: crear nuevo directorio (ejemplo: mkdir testing, creará una carpeta testing en directorio actual)
+cd + arrastrar carpeta: se situará en el directorio de esa carpeta

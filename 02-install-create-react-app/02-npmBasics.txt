@@ -1,0 +1,11 @@
+
+npm init - creates package.json (manifest file), list dependencies
+
+npm install <package name> --save
+install package locally (default) and add to package.json
+
+npm install <package name> -g
+install package globally (access anywhere) SUDO
+
+npm install <package name> --save-dev
+use it only in development
