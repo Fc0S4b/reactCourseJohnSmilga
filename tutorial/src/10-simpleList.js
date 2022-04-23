@@ -15,33 +15,25 @@ const books = [
     title: 'Dime Quien soy',
     author: 'Julia Navarro',
   },
-  {
-    img: 'https://images.cdn1.buscalibre.com/fit-in/180x180/cc/08/cc08ab6395c8b13585a6a2702e469786.jpg',
-    title: 'Los guardianes',
-    author: 'Grisham john',
-  },
 ];
+const names = ['john', 'peter', 'susan'];
+const newName = names.map((name) => {
+  // console.log(name);
+  return <h1>{name}</h1>;
+});
+console.log(newName);
 
 function BookList() {
   return (
     <section className="booklist">
-      {books.map((book) => {
-        //  console.log(book);
-        // return 'hello';
-
-        const { img, title, author } = book;
-        return <Book book={book}></Book>;
-        // <div>
-        //   <h3>{title}</h3>
-        //   <h6>{author}</h6>
-        // </div>
-      })}
+      {/* {books} no puede react renderizar objetos */}
+      {newName}
     </section>
   );
 }
 
 const Book = (props) => {
-  const { img, title, author } = props.book;
+  const { img, title, author } = props;
   // console.log(props);
 
   return (
