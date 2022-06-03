@@ -127,3 +127,12 @@ Con Spread Operator
 8. onMouseOver = {()=>{
    console.log(title);
    }}
+
+### import and Export Statement
+
+1. Como en módulos de JavaScript
+2. export const books =[]
+3. import {books} from './books' no necesita .js porque ya es un archivo js (si fuese .css se agrega u otro formato)
+4. rafce creará un componente con nombre del archivo donde se está creando y hará export default
+5. si se exporta Book como default se importa como:
+   import Book from './Book'
