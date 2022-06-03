@@ -136,3 +136,50 @@ Con Spread Operator
 4. rafce creará un componente con nombre del archivo donde se está creando y hará export default
 5. si se exporta Book como default se importa como:
    import Book from './Book'
+
+### react hooks
+
+#### Use State
+
+1. se importa con import React, {useState} from 'react';
+2. useState es una función que retorna un array y una función que controla el array.
+3. para acceder al array y la función se puede hacer de forma destructurada: [text, setText] = useState('valor default')
+4. la función obliga al componente renderizarse
+
+#### reglas de los hooks
+
+1. siempre empiezan con use
+2. nombre del componente debe ir en uppercase
+3. debe ir en la función/componente del cuerpo
+4. no se puede llamar condicionalmente
+5. si no se importa el hook, se puede acceder con React.useState()
+6. un ejemplo de preservar valores de un objeto y solo cambiar una propiedad, es usando spread operator, ejemplo:
+
+const [person, setPerson] = useState({
+name:'peter',
+age: 24,
+message: 'random message',
+})
+const changeMessage = () =>{
+setPerson({...person, message: 'hello world'});
+}
+
+Solo se cambiará message
+
+7. se puede usar múltiple useState
+8. [value, setValue] = useState(0)
+
+setTimeout(()=>{
+setValue(value + 1)
+}, 2000)
+no se aumentará el value a 3 después de 3 clicks ya que setValue por cada acción tomará el valor default como inicio y no el valor anterior. Para que recuerde el valor anterior, debe usar arrow function:
+setvalue((prevState) =>{
+return prevState + 1
+})
+
+### useEffect
+
+1. Para cualquier trabajo fuera del componente por ejemplo: cambiar el título de la página (ejemplo: notificaciones 5 como nombre de la pestaña y que se actualiza cada vez que cambia el número de notificaciones), registrarse para una suscripción, setear addEventListener, etc.
+2. import React, {useEffect} from 'react'
+3. useEffect se ejecuta por default despupes de cada re-render
+4. no se puede usar if(value > 1){ useEffect()}, si se puede usar useEffect(()=>{ if(value > 1){}})
