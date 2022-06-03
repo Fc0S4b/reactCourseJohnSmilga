@@ -96,3 +96,34 @@ return <div>
    <Book book={book}></Book>
    )
 4. el componente Book tendrá props destructurado y asignado a props.book, book destructurado de map no será necesario
+
+### Key Prop and Spread Operator
+
+1. Necesario para evitar error al crear la lista anterior iterando array con objetos
+2. cada objeto del array debe tener un id:1, id:2, etc.
+   desde la iteración map agregar <Book key={book.id} book={book}></Book>
+3. otra forma es pasarle al map index y luego key={index}, es mejor la forma anterior porque index cambia a medida que cambia el array
+
+Con Spread Operator
+
+4. Pasar todas las props dentro de la iteración map con:
+   {...book}
+5. en la desuctruración del componente no invocado:
+   const {img, title, author} = props (ya no sería = props.book)
+6. o pasar directamente como parámetro {img, title, author}
+
+### Events Basics onClick, onHover (hay muchos más en react docs)
+
+1. se necesita un atributo y un manejador de evento eventHandler
+2. los eventos en camelCase onClick y onMouseOver
+3. atributo= {eventHandler} dentro del componente, no donde se invoca el componente
+4. eventHandler es una función que puede ser definida antes del return o inline:
+5. onClick={eventHandler(author)} se ejecutará al momento del render porque se está invocando el eventHandler
+6. onClick={() => eventHandler(author)} se ejecutará al momento de onClick
+7. const clickHandler = (e)=>{
+   console.log(e);
+   console.log(e.target)
+   }
+8. onMouseOver = {()=>{
+   console.log(title);
+   }}
