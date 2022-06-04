@@ -223,3 +223,8 @@ return prevState + 1
    falso o verdadero = verdadero, se muestra hello world
    const secondValue = text && 'hello world';
    falso y verdadero = falso, se muestra ''
+   Puede ser con componentes {show && <Item />}
+4. togglear un booleano con onClick={()=> setIsError(!isError)} y combinado con un {isError && <h1>Error...</h1>}.Con ternary operator:
+{isError ? (<p>there is an error...</p>) : (<div>
+<h2>there is no error</h2>
+</div>)}.
