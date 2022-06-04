@@ -183,3 +183,43 @@ return prevState + 1
 2. import React, {useEffect} from 'react'
 3. useEffect se ejecuta por default despupes de cada re-render
 4. no se puede usar if(value > 1){ useEffect()}, si se puede usar useEffect(()=>{ if(value > 1){}})
+5. el segundo parámetro de useEffect es para decir que solo se ejecute en el render iniciar useEffect(()=>{}, []), tiene nombre de lista de dependencias
+6. dentro de la lista de dependencias pueden ir los valores que deseas que ejecuten re-render cada vez que cambian, ejemplo [value] con value+1 en useState onClick
+7. Puede usarse múltiples useEffect
+8. la cleanup function es una función que libera la carga de memoria al detectar eventos del useEffect, se puede evitar el re-renderizado usando una lista de dependencias vacía pero es de buena práctica configurar una función de limpieza por ejemplo:
+   useEffect(()=>{
+   window.addEventListener('resize', checkSize);
+   return () =>{
+   window.removeEventListener('resize', checkShize)
+   }
+   })
+   sin removeEventListener, se cargaría la memoria con cada window.addEventListener
+9. no se puede usar una función async await dentro del hook useEffect, porque el hook no retorna una promise
+10. para hacer fetch(url) a una api con useEffect, debes setear la función promise aparte y luego invocarla en useEffect con la lista de dependencia vacía
+11. Otra forma es recoger la promise con then, ejemplo:
+    fetch(url).then((resp) => {
+    if(resp.status >= 200 && resp.status <==299){
+    return resp.json()
+    }
+    else{
+    setIsLoading(false);
+    setIsError(true);
+    throw new Error(resp.statusText);
+    }
+    }).then((user) => { const {login}= user;
+    setUser(login);
+    setIsLoading(false);}).catch((error) => console.log(error))
+    el catch está atrapando el network error, no el 404 del dato api no encontrado por eso se configura un if dentro del then(resp)
+12. ver useEffect - fetch data para un ejemplo de fetch api + map y render el objeto destructurado
+13. condicional rendering: componentes que se ejecutan en base de una condición
+
+### sobre componentes
+
+1. multiple returns en componentes con sentencias if-else, por ejemplo un loading si el estado es falso y el componente cargado si el estado es verdadero
+2. los useState que son booleano se escriben con is de forma convencional [isLoading, setIsLoading] = useState(false)
+3. short-circuit evaluation:
+   [text, setText] = useState('');
+   const firstValue = text || 'hello world';
+   falso o verdadero = verdadero, se muestra hello world
+   const secondValue = text && 'hello world';
+   falso y verdadero = falso, se muestra ''
