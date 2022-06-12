@@ -243,3 +243,32 @@ return prevState + 1
 
 1. para conectar un input a un valor de estado, se usa value= {firstName} y con [firstName, setFirstName] = useState('')
 2. el input no podrá modificarse porque tiene definido '', el value del input debe ir unido a un onChange={(e)=> setFirstName(e.target.value)} se accede al valor del evento detector del objeto con e.target.value
+
+### add items to the list
+
+1. asignando un nuevo state con [], se puede modificar este state si los valores de estado del form son ingresados (son verdaderos), esta asignación se haría en el handleSubmit luego del e.preventDefault
+   ejemplo:
+   const [people, setPeople] = useState([])
+   if(firstName && email){
+   const person = {firstName, email} //que es lo mismo que {firstName:firstName, email:email}
+   setPeople((people => {
+   return [...people, person]
+   }))
+   // volver a setear las cadenas vacías para los inputs
+   setFirstName('')
+   setEmail
+   } else{
+   console.log('empty values')
+   }
+2. uuid package npm para hacer id única, otra forma es setearla según fecha actual, person = {id: new Date().getTime().toString()}
+
+### multiple inputs
+
+1. se puede usar solo un useState que englobe todos los inputs [person, setPerson] = useState({firstName: '', email: '', age: ''})
+2. value será value = {person.firstName} y así sucesivamente.
+3. onChange será onChange = {handleChange}
+4. botón submit tendrá onClick = {handleSubmit} cuya función tendrá e.preventDefault
+5. handleChange tendrá name = e.target.name y value = e.target.value (ahora se está usando el atributo name del form)
+6. la gracia de usar name y value es que se puede acceder a las propiedades dinámicas de objetos (JS)
+7. handleChange tendrá setPerson({...person, [name]:value}) rest operator para ir tomando los valores antiguos y el array name fijado en value que es lo mismo que si escribiese firstName: value si corresponde el input a firstName, se escribe así porque lo hace dinámicamente, de lo contrario al escribir en la casilla age se agregaría los valores a firstName
+8. revisa el código de multiple inputs para ver lo que se hace con handleSubmit, básicamente se recoge los inputs en un objeto si es que son verdaderos, un id, y esto se pasa a setPeople, para luego dejar setPeople en '' cada input
