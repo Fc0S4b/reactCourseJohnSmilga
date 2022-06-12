@@ -228,3 +228,18 @@ return prevState + 1
 {isError ? (<p>there is an error...</p>) : (<div>
 <h2>there is no error</h2>
 </div>)}.
+
+### forms
+
+1. el input va a estar atado al state de value (así como en JS se usa input.value para acceder al valor del input)
+2. para conectar un label a un input, label usará el atributo que usará el id del input htmlFor="firstName"
+3. input usará type al igual que html, otro atributo llamado id="firstName" y name="firstName"
+4. un btn dentro de un form por defaul es tipo submit aunque no lo tengas como atributo
+5. onSubmit={handleSubmit} como atributo en form junto con una función que maneja la acción al hacer submit el form
+6. el handleSubmit si no tiene e.preventDefault() no se ejecutará lo que tenga la función ya que el navegador por default se actualizará al momento de hacer submit el form
+7. también puede usarse en un botón onClick ={handleSubmit}
+
+### controlled inputs
+
+1. para conectar un input a un valor de estado, se usa value= {firstName} y con [firstName, setFirstName] = useState('')
+2. el input no podrá modificarse porque tiene definido '', el value del input debe ir unido a un onChange={(e)=> setFirstName(e.target.value)} se accede al valor del evento detector del objeto con e.target.value
