@@ -272,3 +272,46 @@ return prevState + 1
 6. la gracia de usar name y value es que se puede acceder a las propiedades dinámicas de objetos (JS)
 7. handleChange tendrá setPerson({...person, [name]:value}) rest operator para ir tomando los valores antiguos y el array name fijado en value que es lo mismo que si escribiese firstName: value si corresponde el input a firstName, se escribe así porque lo hace dinámicamente, de lo contrario al escribir en la casilla age se agregaría los valores a firstName
 8. revisa el código de multiple inputs para ver lo que se hace con handleSubmit, básicamente se recoge los inputs en un objeto si es que son verdaderos, un id, y esto se pasa a setPeople, para luego dejar setPeople en '' cada input
+
+### otros
+
+1. usa quokka.js para ver resultado en el mismo script
+2. para entender objetos dinámcos ve este ejemplo:
+   let appState= 'loading';
+   const app = {
+   [appState]: true
+   }
+   console.log(app); // {loading: true}
+   const keyName = 'computer';
+   app[keyName] = 'apple';
+   console.log(app) // {loading: true, computer: 'apple'}
+
+   Una función para agregar datos a un objeto sería:
+   primero definir el objeto:
+   const state = {
+   loading: true,
+   name: '',
+   job: ''
+   }
+   function udpateState(key, value){
+   state[key] = value
+   }
+
+   updateState('name', 'john');
+   console.log(state) {loading:true, name: 'john', job:''}
+
+3. copy to clipboard: navigator.clipboard.writeText(valor a copiar) esto se puede setear con onClick en alguna sección html
+
+### useRef
+
+1. para inputs sin control
+2. useRef es muy parecido a useState, la diferencia es que no activa re-render
+3. preserva los valores y apunta a nodos o elementos del DOM como uso más común
+4. se importa como import React, {useRef} from 'react'
+5. se apunta a un atributo de referencia definiendo primero const refContainer = useRef(null) (modo ejemplo)
+6. el atributo en el cual se invoca useRef se llama ref, ejemplo: <input ref={refContainer}>
+7. refContainer será un objeto con la propiedad current {current: null}
+8. no se necesitará useState u onChange para preservar valores del input, al hacer refContainer.current.value en el handleSubmit, se guardará el valor actual del input en el refContainer
+9. se puede definir más de un useRef
+10. si se usa ref={divContainer} dentro de un div, con divContainer = useRef(null), entonces divContainer.current será ese mismo div con su contenido
+11. lo interesante sería usar useRef en el momento en que la app hace render. Como ejemplo, se usa refContainer.current.focus en un useEffect sin lista de dependencias ya que useRef no activa re-render (al recargar la página, automáticamente se llevará el foco a la casilla input)
