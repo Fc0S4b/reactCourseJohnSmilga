@@ -326,10 +326,34 @@ return prevState + 1
 }
 state se ejecutará cuando se ejecute dispatch "dispatch the action"
 
-useReducer usa como parámetro un valor default que se puede definir directamente o como función aparte
+useReducer usa como parámetro un valor default que se puede definir directamente o como objeto aparte
 const defaultState = {
 people: [],
 isModalOpen: false,
 modalContent: 'hello world'
 }
-useReducer(reducer, defaultState) 4. para acceder al estado isModalOpen, simplemente sería con state.isModalOpen
+useReducer(reducer, defaultState) 4. para acceder al estado isModalOpen, simplemente sería con state.isModalOpen 4. la función reducer manejará dispatch, es decir si dispatch recibe como parámetro dispatch({type: 'TESTING'}), entonces la función reducer responderá a este llamado. Siempre reducer debe devolver el state actualizado sino el resto la funcionalidad en el componente no tendrá sentido. El state dentro del reducer se encarga de actualizar el defaultState definido anteriormente.
+Ya que se invoca dispatch({type: 'TESTING'}), reducer accede a esta propiedad desde el action, ej:
+if(action.type === 'TESTING){
+si es verdadero entonces se modifica el estado anterior tomando en cuenta sus propiedades determinadas y cambiando sus valores
+return {
+...state,
+people: data,
+isModalOpen: true,
+modalContent: 'item added'
+}
+}
+si no es verdadero el action.type se puede devolver un throw new Error('no matching action type'), pero de esta forma se puede devolver distinto tipo de acciones según distintas condicionales 4. dispatch puede recibir más propiedades, por ejemplo:
+const newItem = {id: new Date().getTime().toString(), name};
+dispatch({type: 'ADD_ITEM', payload: newItem})
+entonces dentro del reducer, se podrá manejar el payload definiendo por ejemplo:
+const newPeople = [...state.people, action.payload] (state.people tomará los valores antiguos de people);
+el objeto que retornará usará los nuevos items
+people: newPeople
+
+4. es recomendable siempre recoger los valores defualt del state y luego escribir los que vas a modificar
+   {...state, isModalOpen: true, modalContent: 'please enter value'}
+
+   #### useReducer -remove item
+
+1.
