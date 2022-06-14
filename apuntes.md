@@ -356,4 +356,5 @@ people: newPeople
 
    #### useReducer -remove item
 
-1.
+1. definir un nuevo dispacth({type: 'CLOSE_MODAL'}) como función que se usará como props para modal. closeModal() se ejecutará dentro del modal como parte de un useEffect ya que tendrá como función eliminar el item después de unos segundos.
+1. el botón para remover el item llamará al dispatch con onClick pasándole también el payload: people.id para después comparar con el action.payload y conservar los items que no son removidos en la lista desplegable
