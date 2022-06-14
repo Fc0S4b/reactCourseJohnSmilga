@@ -315,3 +315,21 @@ return prevState + 1
 9. se puede definir más de un useRef
 10. si se usa ref={divContainer} dentro de un div, con divContainer = useRef(null), entonces divContainer.current será ese mismo div con su contenido
 11. lo interesante sería usar useRef en el momento en que la app hace render. Como ejemplo, se usa refContainer.current.focus en un useEffect sin lista de dependencias ya que useRef no activa re-render (al recargar la página, automáticamente se llevará el foco a la casilla input)
+
+### useReducer - useState setup
+
+1. agrega más estructura al estado, no recomendable para casos simples ya que ahí se usa mas useState
+2. depende en gran medida de redux
+3. al usar useReducer se usa state y dispatch: [state, dispatch] = useReducer(reducer), siempre se debe pasar reducer, que es como una función de reducción que toma el estado anterior y toma la "acción" y devuelve un nuevo estado. reducer se definiría simplemente como una función afuera del componente:
+   const reducer = (state, action) =>{
+
+}
+state se ejecutará cuando se ejecute dispatch "dispatch the action"
+
+useReducer usa como parámetro un valor default que se puede definir directamente o como función aparte
+const defaultState = {
+people: [],
+isModalOpen: false,
+modalContent: 'hello world'
+}
+useReducer(reducer, defaultState) 4. para acceder al estado isModalOpen, simplemente sería con state.isModalOpen
