@@ -358,3 +358,23 @@ people: newPeople
 
 1. definir un nuevo dispacth({type: 'CLOSE_MODAL'}) como función que se usará como props para modal. closeModal() se ejecutará dentro del modal como parte de un useEffect ya que tendrá como función eliminar el item después de unos segundos.
 1. el botón para remover el item llamará al dispatch con onClick pasándole también el payload: people.id para después comparar con el action.payload y conservar los items que no son removidos en la lista desplegable
+
+### prop-drilling
+
+1. consiste en pasar las props entre componentes, desde donde se crea el props, pasando por componentes que no necesitan ese props pero que si deben pasarse y llegando al componente final donde va a ser usado. Context Api y useContext facilita esta prácticas
+
+### useContext hook
+
+1. al igual que los hooks anteriores, se debe importar desde react
+2. se crea un context , ejemplo:
+   const PersonContext = React.createContext()
+3. se debe definir dos componentes: el proveedor y el consumidor (antes se usaba el consumidor pero con la actual versión no se usa)
+4. el proveedor funciona como un distribuidor
+5. Hay un wrapper que envuelve lo que retorna el componente. A estos wrappers se les puede pasar value con algún valor
+   <PersonContext.Provider value='hello'></PersonContext.Provider>
+6. desde un componente hijo, se puede acceder al valor de PersonContext usando el hook
+   const data = useContext(PersonContext);
+7. value en el wrapper posee los props que pasarás a los componentes hijos y así no hay que pasarlos desde donde mismo se invoca los componentes
+8. para acceder al props desde el componente donde se va a usar, debe destructurarse el objeto ejemplo:
+   const {removePerson} = useContext(PersonContext)
+9. propDrilling se puede seguir haciendo y mejor hasta 2 o 3 niveles, ya cuando son proyectos mas grandes es mejor usar useContext
