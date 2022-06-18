@@ -353,11 +353,12 @@ people: newPeople
 
 4. es recomendable siempre recoger los valores defualt del state y luego escribir los que vas a modificar
    {...state, isModalOpen: true, modalContent: 'please enter value'}
+5. algunos prefieren usar switch en la función reducer en vez de usar varios if
 
    #### useReducer -remove item
 
-1. definir un nuevo dispacth({type: 'CLOSE_MODAL'}) como función que se usará como props para modal. closeModal() se ejecutará dentro del modal como parte de un useEffect ya que tendrá como función eliminar el item después de unos segundos.
-1. el botón para remover el item llamará al dispatch con onClick pasándole también el payload: people.id para después comparar con el action.payload y conservar los items que no son removidos en la lista desplegable
+6. definir un nuevo dispacth({type: 'CLOSE_MODAL'}) como función que se usará como props para modal. closeModal() se ejecutará dentro del modal como parte de un useEffect ya que tendrá como función eliminar el item después de unos segundos.
+7. el botón para remover el item llamará al dispatch con onClick pasándole también el payload: people.id para después comparar con el action.payload y conservar los items que no son removidos en la lista desplegable
 
 ### prop-drilling
 
@@ -378,3 +379,23 @@ people: newPeople
 8. para acceder al props desde el componente donde se va a usar, debe destructurarse el objeto ejemplo:
    const {removePerson} = useContext(PersonContext)
 9. propDrilling se puede seguir haciendo y mejor hasta 2 o 3 niveles, ya cuando son proyectos mas grandes es mejor usar useContext
+10. siempre debes pasar un objeto children al wrapper de provider ya que si no, no se podrá aplicar para visualizar el contenido que está envolviendo
+    ejemplo:
+    const AppProvider = ({ children }) => {
+    return <AppContext.Provider value="hello">{children}</AppContext.Provider>;
+    };
+11. para no tener que exportar el AppProvider para luego invocarlo en algún componente junto con el hook de useContext, se puede exportar todo de una vez para importar solo la función que lo engloba:
+    export const useGlobalContext = () => {
+    return useContext(AppContext);
+    };
+
+### custom hooks -useFetch
+
+1. para reducir funcionalidades, tales como fetch, localstorage, algo por el estilo
+2. se configura como módulo aparte con nombre de useNombredelHookPersonalizado
+3. dentro del hook personalizado se configura la funcionalidad que luego será usado en el componente principal, por ejemplo fetch, si es fetch, entonces el hook personalizado recibirá como parámetro url, se le puede agregar estados y efectos para loading y error.
+4. desde el componente principal se debe importar el hook personalizado (no olvidar exportar el módulo anteriormente).
+5. el hook personalizado retorna un objeto que tiene como propiedad los estados (como loading y la respuesta de fetch).
+6. desde el componente principal se accede al objeto retornado del hook personalizado mediante destructuración y con el parámetro que necesita, ejemplo: const { loading, products } = useFetch(url);
+
+### ProTypes setup
