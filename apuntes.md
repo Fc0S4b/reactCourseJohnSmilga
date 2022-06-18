@@ -399,3 +399,75 @@ people: newPeople
 6. desde el componente principal se accede al objeto retornado del hook personalizado mediante destructuración y con el parámetro que necesita, ejemplo: const { loading, products } = useFetch(url);
 
 ### ProTypes setup
+
+1. los proptypes nos permiten validar los props
+2. hay veces que las api no tienen toda la información por cada item, por ejemplo que falte una img, o esté configurado un url dentro de otro objeto y en ese caso al iterar sobre el endpoint para que arroje estos resultados tendría errores ya que no encontraría estos valores. Los proptypes ayudan en este caso, se puede asignar valores default para cuando no estén esos elementos
+
+### Proptypes images
+
+1. para usar propTypes debes importarlo como import PropTypes from 'prop-types';
+2. define como objeto todos los props que estas consiguiendo de la api y que posiblemente falte alguno:
+   Product.propTypes = {
+   image: PropTypes.object.isRequired,
+   name: PropTypes.string.isRequired,
+   price: PropTypes.number.isRequired,
+   };
+   debes definir que tipo es cada prop y agregarle acceder a isRequired.
+3. define los valores default de tales props:
+   Product.defaultProps = {
+   name: 'default name',
+   price: 3.99,
+   image: defaultImage,
+   };
+   la imagen tiene una url definida como objeto que no se puede acceder directamente, a continuación se resuelve esto.
+
+### proptypes default
+
+1.  Para ahorrar líneas de código, se puede setear las props por default usando el operador or || dentro de las mismas llaves en donde se invoca el prop por ejemplo {price || 3.99} o {name || 'default name'}, sin embargo para la imagen tendrá un error si se escribe {image.url || defaultImage} porque JS no puede a url de undefined, para arreglar esto se setea aparte url = image && image.url y luego se cambia el props por {url || defaultImage}. De esta forma se le obliga a url que evalúe, si la image está ahí entonces devuelve image.url, así url se verifica solo si la imagen está ahí y no busca sobre indefinido
+2.  algunos snippets: rfcp para escribir el componente con propTypes importado y definido el objeto para setear los propTypes y ptar para escribir un proptype array y con isRequired (puede ser ptsr para string, ptor para object, etc )
+
+### performance optimization
+
+1. react es rápido por default
+2. optimizaciones agregan sus propios costos
+3. esto es porque hay funciones que otorgan optimización a las funcionalidad como react.memo, useCallback, useMemo y en general 'memoizing' (que sería usar la memoria caché)
+4. Kent C. Dodds habla sobre cuando usar useMemo y useCallback, búscalo en google
+
+### useCallback, useMemo
+
+1. se debe importar import React, { useCallback, useMemo }
+2. si tenemos un contador que va cambiando de valor al hacer click un botón, independiente de que se setee la lista vacía de dependencias de useEffect, seguirá rerenderizándose la api del componente (que pertenece a otro componente por ejemplo) cada vez que se hace click. Para evitar esto, se puede usar una función de react que es memo en el componente en donde deseas que no se rerenderize el prop, anteponiendo React.memo al parámetro del componente, ejemplo: const BigList = React.memo(({}) =>{}) o importándolo inicialmente.
+3. memo buscará si el props cambia antes de activar el siguiente renderizado, por lo que lo que la api no se llamará a cada rato
+
+### useCallback
+
+1. si le pasamos al componente que tiene React.memo una prop que cambia por ejemplo: const [cart, setCart] = useState(0);
+   const addToCart = () => {
+   setCart(cart + 1)
+   }
+
+Entonces React.memo pensará que cada vez que cambia ese state, se está creando de 0 por lo que lo renderizará 2. la solución es envolver la función de addTocart en un useCallback con segundo parámetro una lista de dependencias en cart, para que sepa que cada vez que cambia no debe renderizarse la función desde 0
+const addToCart = useCallback(()=>{
+setCart(cart + 1);
+}, [cart])
+
+3. debes agregar cart a la lista de dependencias y no dejarla vacía porque sino el estado quedará siempre con el mismo valor
+
+4. se puede usar cuando react se queja de que falta la lista de dependencias en useEffect, esto se soluciona a continuación
+
+### useMemo
+
+1. useMemo revisa específicamente el valor a diferencia de react.memo que revisa las props
+2. si tenemos una función que demora mucho en calcular un valor y que se activa por cada renderizado, entonces useMemo es una solución
+3. se crea una función con useMemo envolviéndola dentro del hook, para llamar a esa función que realiza mucho trabajo para entregar un resultado y que depende de lo que response la api. También se usa lista de dependencias el valor que se necesita que no se rerenderize (por ejemplo products que arroja la api).
+   const mostExpensive = useMemo(
+   () => calculateMostExpensive(products),
+   [products]
+   );
+
+Luego en el return del componente ya no se usará calculateMostExpensive, se usará directamente mostExpensive sin argumentos. De esta forma se renderizará solo una vez para hallar el producto más caro solo cuando necesite actualizarse.
+
+### useCallback fetch-example
+
+1. el useEffect del custom hook de fetch está exigiendo que se agrege getProducts como lista de dependencias, sin embargo si se hace directamente, se crearía un loop infinito, ya que getProducts llamaría a setProducts para actualizar products y que por ende actualizaría getProducts para luego volver a invocarse.
+2. al usar useCallback en la función de getProducts usando como lista de dependencias url, se evitará el loop infinito, ya que se cambiará solo si url se actualiza y no siempre que se renderize, de esta forma useEffect puede usar getProducts en su lista de dependencias
