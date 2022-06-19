@@ -569,3 +569,43 @@ link y active son clases preconfiguradas con css
    <Dashboard user={user} />
    </ProtectedRoute>
 2. el componente protectedRoute usara navigate para redirigir hacia alguna página si es que no cumple con el prop verdadero. También usará las props children heredadas del componente que envuelve para retornar en caso de que la prop como condición sea verdadera
+
+### axios
+
+1. npm install axios, import axios from 'axios'
+2. axios por defecto realiza get: axios(url)
+3. a diferencia de fetch(), axios maneja los errores tanto los de elementos no encontrados como los de red.
+4. para headers se pasa como segundo parámetro en get: axios.get(url, {}) y para post es el tercer argumento: axios.post(url, {data}, {})
+5. para post, la data que se envía se hace en el segundo parámetro axios.post(url, {data})
+
+### axios global defaults
+
+1. agregar funcionalidad default en la solicitud de axios
+2. para setear un header por default: axios.defaults.headers.common['Accept'] = 'application/json'
+3. desde devtools, network, react-store-products, request headers en headers veras Accept: 'application/json'
+4. esta forma de setear global defaults no es recomendable porque si haces una segunda petición a otro servidor, entonces estarás mandando los mismos headers de la primera petición para la segunda petición
+5. para esto es mejor realizar custom instance
+
+### custom instance
+
+1. para personalizar la instancia axios usa create:
+   const authFetch = axios.create({
+   baseURL:
+   headers:{
+   Accept:
+   }
+   })
+2. authFetch recibirá como parámetro el endpoint que completa el baseURL para hacer el request
+
+### interceptores
+
+1. funciones que axios llama para cada solicitud y podemos usarlas para transformar la solcitud antes de que abandone la aplicación así como agregar algo de lógica personalizada cuando manejamos la respuesta
+2. sirve para apps complejas, como por ejemplo autentificaciones
+3. se puede agregar tanto global como en custom
+4. se puede hacer solicitudes salientes y de respuesta:
+   custom.interceptors.request.use()
+   custom.interceptors.response.use()
+5. posee dos funciones dentro, una de request (para el caso de request, response para el otro caso) y error. Siempre debe retornar request/response.
+6. los errores se manejan con Promise.reject(error)
+7. request se parece mucho a la instancia global al configurar header:(request) =>{ request.headers.common['Accept'] = 'application/json'}
+8. las dos funciones internas se separan por comas (son dos parámetros)
