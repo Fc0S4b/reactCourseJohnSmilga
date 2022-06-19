@@ -471,3 +471,101 @@ Luego en el return del componente ya no se usará calculateMostExpensive, se usa
 
 1. el useEffect del custom hook de fetch está exigiendo que se agrege getProducts como lista de dependencias, sin embargo si se hace directamente, se crearía un loop infinito, ya que getProducts llamaría a setProducts para actualizar products y que por ende actualizaría getProducts para luego volver a invocarse.
 2. al usar useCallback en la función de getProducts usando como lista de dependencias url, se evitará el loop infinito, ya que se cambiará solo si url se actualiza y no siempre que se renderize, de esta forma useEffect puede usar getProducts en su lista de dependencias
+
+## React Route 6
+
+1. Hasta ahora no hemos seteado varias páginas en un proyecto, con react Route no se necesita rerenderizar una página nueva para navegar entre diferentes páginas. Ayuda a que suceda de inmediato y no se cargue de nuevo la página.
+2. React Route no es de react, es una librería externa. Con esta funcionalidad podremos realizar el enrutamiento a diferentes páginas en una página web
+3. react route utilza 3 componentes que se deben importar: import { BrowserRouter, Routes, Route } from 'react-router-dom';
+4. browserRouter para conectar con el navegador, Routes como parent de las rutas o páginas que se setearan y route para definir las rutas.
+5. route usa como atributo path, si la página es el home entonces su valor será "/", si es about entonces "about", etc. desde el navegador se accederá a esta ruta escribiéndo después de localhost:3000/about.
+6. route tiene otro atributo que es element que es código {} que renderizará el route para mostrar en la página
+7. se puede importar y setear en element los componentes pertenecientes a cada ruta o sección de la página
+
+<Route path="/" element={<Home />} />
+<Route path="about" element={<About />} />
+<Route path="products" element={<Products />} />
+
+### Link
+
+1. importar link con: import { Link } from 'react-router-dom';
+2. sirve para envolver botones o enlaces y dirigirse hacia otras rutas
+3. se usa dentro de lo que retorna el componente
+4. <Link to="/" className="btn">
+     Back Home
+   </Link>
+
+### error
+
+1. se puede setear un componente de error que provenga desde cualquier enlace mal escrito, con asterisco se rutea : <Route path="\*" element={<Error />} />
+
+### rutas anidadas
+
+1. para anidar rutas se puede hacer con los mismos componentes route envolviendo otros componentes route. El componente padre será lo que se renderizará y no los componentes relativos al componente padre.
+   <Route path="/">
+   <Route path="about"/>
+   </Route>
+1. about no se verá, solo se ve el componente principal /, sin embargo la ruta existirá, esto se arreglará en las proximas notas.
+
+### navbar
+
+1. para hacer un navbar por ejemplo, se debe hacer por encima o por debajo del componente routes, si se hace dentro arrojará error.
+2. Todo lo que esté encima o debajo de routes se verá para todos los route incluyendo el componente error
+
+### shared layout
+
+1. se importa outlet:
+   import { Outlet } from 'react-router-dom';
+2. lo que sea que tenga <Outlet/> por encima o por debajo se compartirá con los componentes route hijos. Como que actúa en modo de almacén para envolver el código de los componentes hijos.
+   <Navbar />
+   <section className="section">
+   {/_ <Link to="/about" className="btn">
+   About
+   </Link> _/}
+   <Outlet />
+   </section>
+
+### index route
+
+1. se fija como un route
+   <Route index element={<Home />}/>
+2. siempre coincidirá el index con el path del route padre
+3. sirve para dar referencia su path al path del parent para que los demás componentes sean relativos a este componente index pero que además tenga su propia funcionalidad (como por ejemplo el home con su propia ruta /)
+4. el route parent tendrá element={<SharedLayout />} que puede ser por ejemplo un navbar (recuerda que se comparte el componente con los demás componentes al fijar el componente outlet)
+
+### NavLink
+
+1. se importa con: import { NavLink } from 'react-router-dom';
+2. se usa NavLink como etiqueta en vez de Link y en las clases o style se usa isActive para togglear entre estados activos o cambios de estilo, ejemplo:
+   Con style:
+
+style={({ isActive }) => {
+return { color: isActive ? 'red' : 'grey' };
+}}
+
+Con className:
+className={({ isActive }) => (isActive ? 'link active' : 'link')}
+
+link y active son clases preconfiguradas con css
+
+### URL params
+
+1. para usar subrutas:
+   <Route path="products/:productId" element={<SingleProduct />} />
+2. desde SingleProduct se importa : import { Link, useParams } from 'react-router-dom';
+3. useParams devuelve un objeto con una propiedad llamada producId con valor igual a lo que se indique en la url como id (números /3243 )
+4. al destructurar useParams, debe coincidir la propiedad destructurada con el nombre que le diste a la subruta en el path, en este caso productId
+
+### useNavigate
+
+1. se importa: import { useNavigate } from 'react-router-dom';
+2. se puede usar como función: const navigate = useNavigate();
+3. navigate('/dashboard') hará que se redirija hacia la ruta que se le pasa como parámetro
+
+### ProtectedRoute
+
+1. es un componente normal que se usa para envolver otro componente children y "protegerlo" para no ser visto, en este ejemplo, solo se verá si user es verdadero:
+   <ProtectedRoute user={user}>
+   <Dashboard user={user} />
+   </ProtectedRoute>
+2. el componente protectedRoute usara navigate para redirigir hacia alguna página si es que no cumple con el prop verdadero. También usará las props children heredadas del componente que envuelve para retornar en caso de que la prop como condición sea verdadera
