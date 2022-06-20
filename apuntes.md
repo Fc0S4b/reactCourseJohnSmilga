@@ -231,7 +231,8 @@ return prevState + 1
 
 ### forms
 
-1. el input va a estar atado al state de value (así como en JS se usa input.value para acceder al valor del input)
+0. hay input controlados y no controlados (los no controlados se verán con useRef)
+1. el input controlado va a estar atado al state de value (así como en JS se usa input.value para acceder al valor del input)
 2. para conectar un label a un input, label usará el atributo que usará el id del input htmlFor="firstName"
 3. input usará type al igual que html, otro atributo llamado id="firstName" y name="firstName"
 4. un btn dentro de un form por defaul es tipo submit aunque no lo tengas como atributo
@@ -609,3 +610,9 @@ link y active son clases preconfiguradas con css
 6. los errores se manejan con Promise.reject(error)
 7. request se parece mucho a la instancia global al configurar header:(request) =>{ request.headers.common['Accept'] = 'application/json'}
 8. las dos funciones internas se separan por comas (son dos parámetros)
+
+### deploy project
+
+1. debes ejecutar npm build, la carpeta que se crea es la que se sube al hosting
+2. si usas react router 6 y netlify, asegura crear un archivo en public llamado \_redirects especificando /\* /index.html 200
+3. para deploy continuo, sube el proyecto a react en un nuevo repositorio y carga el repo desde netlify, sin embargo hay un error al hacer cambios instantáneos que lo debes arreglar modificando el package.json en "build" agregar "CI= react-scripts build"
